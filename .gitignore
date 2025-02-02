@@ -1,0 +1,11 @@
+tmp
+testbook.kepub
+testcover.png
+testmetadata.db
+books
+proxy/logs
+.env
+.DS_Store
+kobo
+kobomatic.db
+logs

@@ -1,0 +1,11 @@
+{
+  "go.lintTool": "golangci-lint",
+  "biome.enabled": false,
+  "[go]": {
+    "editor.insertSpaces": false,
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always"
+    }
+  },
+}

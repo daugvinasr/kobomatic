@@ -1,0 +1,24 @@
+name: Build and push container
+permissions: write-all
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Login to GitHub container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build the kobomatic docker image
+        run: docker build . --file Dockerfile --tag ghcr.io/daugvinasr/kobomatic:latest
+
+      - name: Push kobomatic docker image to ghcr.io as latest
+        run: docker push ghcr.io/daugvinasr/kobomatic:latest

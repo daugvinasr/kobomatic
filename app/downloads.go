@@ -1,14 +1,15 @@
 package app
 
 import (
+	"archive/zip"
+	"bytes"
+	"context"
 	"fmt"
 	"net/http"
-	"os"
-	"os/exec"
 
 	"github.com/daugvinasr/kobomatic/database/calibre"
-	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
+	"github.com/pgaskin/kepubify/v4/kepub"
 )
 
 func (app *App) GetBookFile(c echo.Context) error {
@@ -19,26 +20,26 @@ func (app *App) GetBookFile(c echo.Context) error {
 
 	inputPath := fmt.Sprintf("%s/%s/%s.%s", app.env.LibraryFolder, row.Path, row.Name, "epub")
 
-	_, err = os.Stat(inputPath)
+	output := bytes.NewBuffer(nil)
+
+	r, err := zip.OpenReader(inputPath)
 	if err != nil {
+		return nil
+	}
+	defer r.Close()
+
+	if err = kepub.NewConverter().Convert(context.Background(), output, r); err != nil {
 		return err
 	}
 
-	outputPath := fmt.Sprintf("/tmp/%s.kepub.epub", uuid.New())
+	c.Response().Header().Set(
+		"Content-Disposition",
+		fmt.Sprintf("attachment; filename=\"%s.kepub.epub\"",
+			row.Name),
+	)
 
-	err = exec.Command("kepubify", inputPath, "-o", outputPath).Run()
-	if err != nil {
-		return err
-	}
-
-	file, err := os.ReadFile(outputPath)
-	if err != nil {
-		return err
-	}
-
-	defer os.Remove(outputPath)
-
-	c.Response().Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=\"%s.kepub.epub\"", row.Name))
-
-	return c.Blob(http.StatusOK, "application/kepub", file)
+	return c.Blob(http.StatusOK,
+		"application/kepub",
+		output.Bytes(),
+	)
 }

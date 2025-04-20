@@ -38,7 +38,7 @@ func Load() (*Config, error) {
 		return nil, err
 	}
 
-	kobomaticFolder, err := getVariable("CKSS_FOLDER")
+	kobomaticFolder, err := getVariable("KOBOMATIC_FOLDER")
 	if err != nil {
 		return nil, err
 	}

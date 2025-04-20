@@ -28,7 +28,8 @@ func (app *App) GetBookFile(c echo.Context) error {
 	}
 	defer r.Close()
 
-	if err = kepub.NewConverter().Convert(context.Background(), output, r); err != nil {
+	err = kepub.NewConverter().Convert(context.Background(), output, r)
+	if err != nil {
 		return err
 	}
 

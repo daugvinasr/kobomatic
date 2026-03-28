@@ -1,4 +1,4 @@
-FROM golang:1.24.2-alpine AS kobomatic-builder
+FROM golang:1.26.1-alpine AS kobomatic-builder
 WORKDIR /app
 
 COPY go.mod go.sum ./

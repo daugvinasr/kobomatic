@@ -1,0 +1,11 @@
+.git
+.github
+.vscode
+.DS_Store
+.air.toml
+.golangci.yml
+mise.toml
+Makefile
+readme.md
+request-saver.py
+reset.bash

@@ -1,24 +1,36 @@
 name: Build and push container
-permissions: write-all
 
 on:
-  workflow_dispatch:
+  push:
+    tags: ["v*"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
 
-      - name: Login to GitHub container registry
-        uses: docker/login-action@v2
+      - uses: docker/login-action@v4
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build the kobomatic docker image
-        run: docker build . --file Dockerfile --tag ghcr.io/daugvinasr/kobomatic:latest
+      - id: meta
+        uses: docker/metadata-action@v6
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
 
-      - name: Push kobomatic docker image to ghcr.io as latest
-        run: docker push ghcr.io/daugvinasr/kobomatic:latest
+      - uses: docker/build-push-action@v7
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

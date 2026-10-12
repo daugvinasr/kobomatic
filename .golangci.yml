@@ -14,7 +14,7 @@ linters:
     - errname
     - errorlint
     - exhaustive
-    - exhaustruct
+    - exhaustruct_v5
     - fatcontext
     - forbidigo
     - gocheckcompilerdirectives
@@ -27,7 +27,7 @@ linters:
     - gocyclo
     - godot
     - gomoddirectives
-    - gomodguard
+    - gomodguard_v2
     - goprintffuncname
     - gosec
     - govet
@@ -65,6 +65,9 @@ linters:
     - usestdlibvars
     - wastedassign
     - whitespace
+  settings:
+    goconst:
+      ignore-map-keys: true
   exclusions:
     generated: lax
     presets:

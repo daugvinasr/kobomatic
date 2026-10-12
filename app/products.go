@@ -50,7 +50,7 @@ func (app *App) GetFeaturedProductsTab(c echo.Context) error {
 		"TotalItemCount":   0,
 		"CurrentPageIndex": 0,
 		"ItemsPerPage":     100,
-		"Filters":          echo.Map{"PreOrders": []string{"True", "False"}},
+		"Filters":          echo.Map{"PreOrders": []string{koboTrue, koboFalse}},
 	})
 }
 

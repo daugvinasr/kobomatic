@@ -6,6 +6,8 @@ import (
 	sq "github.com/Masterminds/squirrel"
 )
 
+const formatEPUB = "EPUB"
+
 // -----------------------------------------------------------------------------
 
 func FindBookCover(db *sql.DB, uuid string) (string, error) {
@@ -37,7 +39,7 @@ func FindBookFilePath(db *sql.DB, uuid string) (FindBookFilePathRow, error) {
 		Where(sq.And{
 			sq.NotEq{"books.path": nil},
 			sq.NotEq{"data.name": nil},
-			sq.Eq{"data.format": "EPUB"},
+			sq.Eq{"data.format": formatEPUB},
 			sq.Eq{"books.uuid": uuid},
 		})
 
@@ -91,7 +93,7 @@ func FindBookMetadata(db *sql.DB, uuid string) (FindBookMetadataRow, error) {
 			sq.NotEq{"data.uncompressed_size": nil},
 			sq.NotEq{"publishers.name": nil},
 			sq.NotEq{"books.last_modified": nil},
-			sq.Eq{"data.format": "EPUB"},
+			sq.Eq{"data.format": formatEPUB},
 			sq.Eq{"books.uuid": uuid},
 		}).
 		GroupBy("books.uuid") // if book has two authors calibre makes two seperate book entries
@@ -144,7 +146,7 @@ func FindBooksMetadata(db *sql.DB, lastSync string) ([]FindBookMetadataRow, erro
 			sq.NotEq{"data.uncompressed_size": nil},
 			sq.NotEq{"publishers.name": nil},
 			sq.NotEq{"books.last_modified": nil},
-			sq.Eq{"data.format": "EPUB"},
+			sq.Eq{"data.format": formatEPUB},
 			sq.Gt{"books.last_modified": lastSync},
 		}).
 		GroupBy("books.uuid") // if book has two authors calibre makes two seperate book entries

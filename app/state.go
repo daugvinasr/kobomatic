@@ -108,13 +108,13 @@ func (app *App) PutBookReadingState(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, echo.Map{
-		"RequestResult": "Success",
+		"RequestResult": resultSuccess,
 		"UpdateResults": []echo.Map{
 			{
 				"EntitlementId":         readingState.EntitlementID,
-				"StatusInfoResult":      echo.Map{"Result": "Success"},
-				"StatisticsResult":      echo.Map{"Result": "Success"},
-				"CurrentBookmarkResult": echo.Map{"Result": "Success"},
+				"StatusInfoResult":      echo.Map{"Result": resultSuccess},
+				"StatisticsResult":      echo.Map{"Result": resultSuccess},
+				"CurrentBookmarkResult": echo.Map{"Result": resultSuccess},
 			},
 		},
 	})

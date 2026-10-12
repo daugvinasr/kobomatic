@@ -8,7 +8,7 @@ import (
 
 func (app *App) PostAnalyticsTests(c echo.Context) error {
 	return c.JSON(http.StatusOK, echo.Map{
-		"Result":  "Success",
+		"Result":  resultSuccess,
 		"TestKey": "00000000-0000-0000-0000-000000000000",
 		"Tests":   echo.Map{},
 	})
